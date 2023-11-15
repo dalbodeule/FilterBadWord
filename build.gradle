@@ -35,7 +35,11 @@ dependencies {
     compileOnly group: 'org.spigotmc', name: 'spigot-api', version: '1.18-R0.1-SNAPSHOT'
     compileOnly group: 'net.md-5', name: 'bungeecord-api', version: '1.16-R0.1'
 
-    implementation 'org.tensorflow:tensorflow:1.15.0'
+    // https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-api
+    implementation 'org.tensorflow:tensorflow-core-api:0.5.0'
+    implementation 'org.tensorflow:tensorflow-core-api:0.5.0:macosx-x86_64'
+
+
     implementation 'com.github.vinhkhuc:jfasttext:0.5'
 
     implementation('ch.qos.logback:logback-classic:1.2.9')

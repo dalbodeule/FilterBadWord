@@ -1,28 +1,30 @@
 package space.mori.filterbadword;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.tensorflow.Graph
-import org.tensorflow.Session
+import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
+import org.bukkit.event.Listener
+import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.plugin.java.JavaPlugin
 import space.mori.filterbadword.models.BadWord
 import space.mori.filterbadword.models.FastText
-import java.nio.file.Files
-import java.nio.file.Paths
 
-class FilterBadWord: JavaPlugin() {
+class FilterBadWord: JavaPlugin(), Listener {
     companion object {
         lateinit var instance: FilterBadWord
         lateinit var badWord: BadWord
         lateinit var fastText: FastText
-
     }
 
     override fun onEnable() {
         instance = this
-        badWord = BadWord()
-        badWord.initSession()
 
         fastText = FastText()
         fastText.initFastText()
+
+        badWord = BadWord()
+        badWord.initBadWord()
+
+        server.pluginManager.registerEvents(this, this)
 
         // command initialize
         //server.getPluginCommand("discord")?.run {
@@ -42,5 +44,14 @@ class FilterBadWord: JavaPlugin() {
 
         badWord.closeSession()
         fastText.closeSession()
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onPlayerChat(event: AsyncPlayerChatEvent) {
+        val ratio = badWord.getChatIsBad(event.message)
+        if(ratio > 0.8) {
+            event.isCancelled = true
+        }
+        instance.logger.info("player: ${event.player.displayName}, chat: ${event.message}, ratio: ${ratio}")
     }
 }
