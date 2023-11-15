@@ -1,0 +1,4 @@
+name: FilterBadWord
+version: '${version}'
+main: space.mori.filterbadword.FilterBadWord
+api-version: '1.18'
